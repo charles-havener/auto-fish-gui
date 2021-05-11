@@ -13,17 +13,13 @@ def main():
     app.mainloop()
 
 
+    # Update config file with new total count on GUI close
+    cfg.update_config("VARIABLES", "count", str(app.configCount))
 
 
     #TODO Create some logs just for funzies
     # everytime something happens in app
     # [date:time] - What happened
-
-
-
-    #TODO: on gui close update total count in .ini
-    #TODO: should be this -> cfg.update_config("VAIRIABLES", "Count", app.totalCount)
-
 
 if __name__ == "__main__":
     main()
