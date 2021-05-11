@@ -85,7 +85,7 @@ class Application(tk.Frame):
         self.progressBar.start()
         self.statusLabel['text'] = "Status: Running"
 
-        self.checking = self.check_status()
+        self.checking = self.after(1000, self.check_status)
 
     
     def check_status(self):
