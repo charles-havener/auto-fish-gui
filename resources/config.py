@@ -23,7 +23,7 @@ class ConfigFile():
         # set up the config_file
         config = configparser.ConfigParser()
         config['VARIABLES'] = {
-            'Count': '100'
+            'count': '100'
         }
         config['COORDINATES'] = {
             'bar': '(0,0)',
@@ -37,8 +37,8 @@ class ConfigFile():
         }
         # TODO: store x,y coordinates
         # TODO: store colors #should be the same for all (from addon)
-        # only need face color since every icon has a different bar color except for brown
-        # if brown check if also face, if not than catch, if so then cast
+            # only need face color since every icon has a different bar color except for brown
+            # if brown check if also face, if not than catch, if so then cast
 
         with open(self.filepath, 'w') as configfile:
             config.write(configfile)
@@ -46,4 +46,6 @@ class ConfigFile():
     # Update an item in the config file
     def update_config(self, section, key, value):
         self.config.set(section, key, value)
+        with open(self.filepath, 'w+') as configfile:
+            self.config.write(configfile)
 
