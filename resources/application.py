@@ -15,12 +15,13 @@ class Application(tk.Frame):
         # Force on top
         self.master.attributes('-topmost', True)
 
+        # Vars from config
+        self.configCount = int(config.config['VARIABLES']['Count'])
+
+
         # Creating Layout
         self.pack()
         self.create_widgets()
-
-        # Additional Vars
-        self.totalCount = config.config['VARIABLES']['Count']
 
 
     def create_widgets(self):
@@ -37,7 +38,7 @@ class Application(tk.Frame):
         self.totalLabel = ttk.Label(self, text="Total: ")
         self.totalLabel.grid(row=row, column=1)
 
-        self.totalCount = ttk.Label(self, text="0")
+        self.totalCount = ttk.Label(self, text=f"{self.configCount}")
         self.totalCount.grid(row=row, column=2, sticky=W)
 
         self.sessionLabel = ttk.Label(self, text="Session: ")
@@ -51,10 +52,12 @@ class Application(tk.Frame):
         pady=(15,0)
         self.startButton = ttk.Button(self, text="Start", width=15)
         self.startButton.grid(row=row, column=1, columnspan=2, sticky=NSEW, pady=pady)
+        self.startButton['command'] = lambda: self.change_run_state(True)
 
         self.stopButton = ttk.Button(self, text="Stop", width=15)
         self.stopButton.grid(row=row, column=3, columnspan=2, sticky=NSEW, pady=pady)
         self.stopButton["state"] = DISABLED
+        self.stopButton['command'] = lambda: self.change_run_state(False)
 
         # ------------ Row 4 ------------
         row+=1
@@ -66,10 +69,27 @@ class Application(tk.Frame):
         self.statusLabel = ttk.Label(self, text="Status: Not Running")
         self.statusLabel.grid(row = row, column=1, columnspan=4)
 
-    '''
-    --Example of running the same thing over and over without freezing the GUI--
 
+    def change_run_state(self, run):
+        if not run:
+            self.progressBar.stop()
+            self.statusLabel['text'] = "Status: Stopped"
+            self.after_cancel(self.checking)
+            self.checking = None
+            self.startButton['state'] = 'enabled'
+            self.stopButton['state'] = 'disabled'
+            return
+        
+        self.startButton['state'] = 'disabled'
+        self.stopButton['state'] = 'enabled'
+        self.progressBar.start()
+        self.statusLabel['text'] = "Status: Running"
+
+        self.checking = self.check_status()
+
+    
     def check_status(self):
-        self.count['text'] = f"Counting: {str(int(self.count['text'].split(': ')[1]) + 1)}"
+        self.configCount += 1
+        self.totalCount['text'] = str(int(self.totalCount['text']) + 1)
+        self.sessionCount['text'] = str(int(self.sessionCount['text'])+1)
         self.checking = self.after(1000, self.check_status)
-    '''
