@@ -26,10 +26,8 @@ class ConfigFile():
             'Count': '100'
         }
         config['COORDINATES'] = {
-            'bar_x': '0',
-            'bar_y': '0',
-            'icon_x': '0',
-            'icon_y': '0',
+            'bar': '(0,0)',
+            'icon': '(0,0)',
         }
         config['COLORS'] = {
             'brown_bar': '(0,0,0)',
