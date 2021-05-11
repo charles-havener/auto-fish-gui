@@ -22,11 +22,28 @@ class ConfigFile():
 
         # set up the config_file
         config = configparser.ConfigParser()
-        config['VARIABLES'] = {'Count': '100'}
+        config['VARIABLES'] = {
+            'Count': '100'
+        }
+        config['COORDINATES'] = {
+            'bar_x': '0',
+            'bar_y': '0',
+            'icon_x': '0',
+            'icon_y': '0',
+        }
+        config['COLORS'] = {
+            'brown_bar': '(0,0,0)',
+            'blue_bar': '(0,0,0)',
+            'green_bar': '(0,0,0)',
+            'face_color': '(0,0,0)',
+        }
+        # TODO: store x,y coordinates
+        # TODO: store colors #should be the same for all (from addon)
+        # only need face color since every icon has a different bar color except for brown
+        # if brown check if also face, if not than catch, if so then cast
 
         with open(self.filepath, 'w') as configfile:
             config.write(configfile)
-
 
     # Update an item in the config file
     def update_config(self, section, key, value):
