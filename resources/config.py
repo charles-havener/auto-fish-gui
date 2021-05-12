@@ -23,7 +23,7 @@ class ConfigFile():
         # set up the config_file
         config = configparser.ConfigParser()
         config['VARIABLES'] = {
-            'count': '100'
+            'count': '0'
         }
         config['KEYBINDS'] = {
             'cast_key': 'y',
@@ -52,7 +52,7 @@ class ConfigFile():
             self.config.write(configfile)
 
 """
-To get (x,y) locaitons and (R,G,B) values:
+To get (x,y) locaitons and (R,G,B) values of pixels:
 
 in cmd with venv that has pyautogui
 $ python
