@@ -1,6 +1,9 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.constants import *
+import pyautogui
+import numpy as np
+import time
 
 class Application(tk.Frame):
     def __init__(self, config, master=None):
@@ -23,6 +26,12 @@ class Application(tk.Frame):
         self.blueColor = eval(config.config['COLORS']['blue_bar'])
         self.greenColor = eval(config.config['COLORS']['green_bar'])
         self.faceColor = eval(config.config['COLORS']['face_color'])
+        self.bagColor = eval(config.config['COLORS']['bag_color'])
+        self.castKey = config.config['KEYBINDS']['cast_key']
+        self.catchKey = config.config['KEYBINDS']['catch_key']
+
+        # Additional vars
+        self.stdWaitTime = 200
 
         # Creating Layout
         self.pack()
@@ -75,12 +84,17 @@ class Application(tk.Frame):
         self.statusLabel.grid(row = row, column=1, columnspan=4)
 
 
+    def waitToRun(self):
+        self.checking = self.after(10, self.check_status())
+
     def change_run_state(self, run):
         if not run:
             self.progressBar.stop()
             self.statusLabel['text'] = "Status: Stopped"
             self.after_cancel(self.checking)
+            self.after_cancel(self.pressing)
             self.checking = None
+            self.pressing = None
             self.startButton['state'] = 'enabled'
             self.stopButton['state'] = 'disabled'
             return
@@ -88,14 +102,52 @@ class Application(tk.Frame):
         self.startButton['state'] = 'disabled'
         self.stopButton['state'] = 'enabled'
         self.progressBar.start()
-        self.statusLabel['text'] = "Status: Running"
+        self.statusLabel['text'] = "Status: Starting in 3 sec"
 
         # 3 sec wait before starting to get to game window
-        self.checking = self.after(3000, self.check_status)
+        self.pressing = self.after(3000, self.waitToRun)
 
-    
+
+    def keyPress(self, key, release_deleay):
+        pyautogui.keyDown(key)
+        time.sleep(release_deleay)
+        pyautogui.keyUp(key)
+
+
     def check_status(self):
-        self.configCount += 1
-        self.totalCount['text'] = str(int(self.totalCount['text']) + 1)
-        self.sessionCount['text'] = str(int(self.sessionCount['text'])+1)
-        self.checking = self.after(1000, self.check_status)
+        barColor = pyautogui.pixel(self.barLocation[0], self.barLocation[1])
+        iconColor = pyautogui.pixel(self.iconLocation[0], self.iconLocation[1])
+
+        # Able to cast
+        if barColor == self.brownColor and iconColor == self.faceColor:
+            self.statusLabel['text'] = "Status: Attempting cast"
+            startDelay = np.random.uniform(0.2,0.7)
+            releaseDelay = np.random.uniform(0.031,0.11)
+            self.pressing = self.after(int(startDelay*1000), lambda: self.keyPress(self.castKey, releaseDelay))
+            self.checking = self.after(int(self.stdWaitTime*3+(startDelay+releaseDelay)*1000), self.check_status)
+
+        # Waiting for bite
+        elif barColor == self.blueColor:
+            self.statusLabel['text'] = "Status: Waiting for bite"
+            self.checking = self.after(self.stdWaitTime, self.check_status)
+
+        # Ready to catch
+        elif barColor == self.greenColor:
+            self.statusLabel['text'] = "Status: Attempting to catch"
+            startDelay = np.random.uniform(0.68,1.68)
+            releaseDelay = np.random.uniform(0.028,0.98)
+            self.pressing = self.after(int(startDelay*1000), lambda: self.keyPress(self.catchKey, releaseDelay))
+            self.checking = self.after(int(self.stdWaitTime+(startDelay+releaseDelay)*1000), self.check_status)
+
+        # Baggin it
+        elif iconColor == self.bagColor:
+            self.statusLabel['text'] = "Status: Collecting Loot"
+            self.configCount += 1
+            self.totalCount['text'] = str(int(self.totalCount['text']) + 1)
+            self.sessionCount['text'] = str(int(self.sessionCount['text'])+1)
+            self.checking = self.after(int(np.random.uniform(4.0,4.25)*1000), self.check_status)
+
+        # Not able to cast
+        else:
+            self.statusLabel['text'] = "Status: Waiting for valid cast location"
+            self.checking = self.after(self.stdWaitTime, self.check_status)
