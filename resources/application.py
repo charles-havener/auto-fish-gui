@@ -40,11 +40,11 @@ class Application(tk.Frame):
 
     def create_widgets(self):
         # ---------- Title Bar ----------
-        self.master.title("Title Bar")
+        self.master.title("auto_fish.exe")
 
         # ------------ Row 1 ------------
         row = 1
-        self.header = ttk.Label(self, text="Title", font=("Arial", 20))
+        self.header = ttk.Label(self, text="ESO Auto Fish", font=("Arial", 20))
         self.header.grid(row=row, column=1, columnspan=4, pady=(10,3))
 
         # ------------ Row 2 ------------
