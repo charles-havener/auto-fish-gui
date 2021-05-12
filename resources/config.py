@@ -25,22 +25,23 @@ class ConfigFile():
         config['VARIABLES'] = {
             'count': '100'
         }
+        config['KEYBINDS'] = {
+            'cast_key': 'y',
+            'catch_key': 'y',
+        }
         # check comment on bottom for how to get coordinates/colors
         config['COORDINATES'] = {
-            'bar': '(0,0)',
-            'icon': '(0,0)',
+            'bar': '(2761,1009)',
+            'icon': '(2787,1068)',
         }
         config['COLORS'] = {
-            'brown_bar': '(0,0,0)',
-            'blue_bar': '(0,0,0)',
-            'green_bar': '(0,0,0)',
-            'face_color': '(0,0,0)',
+            'brown_bar': '(101,69,0)',
+            'blue_bar': '(75,156,213)',
+            'green_bar': '(0,204,0)',
+            'face_color': '(255,204,77)',
+            'bag_color': '(253,216,137)',
         }
-        # TODO: store x,y coordinates
-        # TODO: store colors #should be the same for all (from addon)
-            # only need face color since every icon has a different bar color except for brown
-            # if brown check if also face, if not than catch, if so then cast
-
+        
         with open(self.filepath, 'w') as configfile:
             config.write(configfile)
 
