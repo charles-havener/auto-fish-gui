@@ -16,8 +16,13 @@ class Application(tk.Frame):
         self.master.attributes('-topmost', True)
 
         # Vars from config
-        self.configCount = int(config.config['VARIABLES']['Count'])
-
+        self.configCount = int(config.config['VARIABLES']['count'])
+        self.barLocation = eval(config.config['COORDINATES']['bar'])
+        self.iconLocation = eval(config.config['COORDINATES']['icon'])
+        self.brownColor = eval(config.config['COLORS']['brown_bar'])
+        self.blueColor = eval(config.config['COLORS']['blue_bar'])
+        self.greenColor = eval(config.config['COLORS']['green_bar'])
+        self.faceColor = eval(config.config['COLORS']['face_color'])
 
         # Creating Layout
         self.pack()
@@ -85,7 +90,8 @@ class Application(tk.Frame):
         self.progressBar.start()
         self.statusLabel['text'] = "Status: Running"
 
-        self.checking = self.after(1000, self.check_status)
+        # 3 sec wait before starting to get to game window
+        self.checking = self.after(3000, self.check_status)
 
     
     def check_status(self):
