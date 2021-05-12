@@ -25,6 +25,7 @@ class ConfigFile():
         config['VARIABLES'] = {
             'count': '100'
         }
+        # check comment on bottom for how to get coordinates/colors
         config['COORDINATES'] = {
             'bar': '(0,0)',
             'icon': '(0,0)',
@@ -49,3 +50,14 @@ class ConfigFile():
         with open(self.filepath, 'w+') as configfile:
             self.config.write(configfile)
 
+"""
+To get (x,y) locaitons and (R,G,B) values:
+
+in cmd with venv that has pyautogui
+$ python
+>> import pyautogui
+>> pyautogui.displayMousePosition()
+
+will print out the informaiton as the cursor moves on screen.
+
+"""
