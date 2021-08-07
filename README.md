@@ -31,13 +31,3 @@ The tool will always remain on top of other active windows. Edit the config file
 
 The tool uses random wait times between a chosen min and max to appear more like a real player. It won't react faster than a human, and the maximum is set to a point where it will occasionaly (~2% of the time) fail to perform an action in time and lose the fish.
 </br>
-
-# Example Output
-
-### Combo Chart
-<img src="examples/example_combo.png">
-</br></br>
-
-### Single Charts
-<img src="examples/example_0.5.png">
-<img src="examples/example_5.0.png">
